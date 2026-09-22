@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SENS Research Symposium 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Deakin supplementary palette - light mode */
+    --bg: #ffffff;
+    --card-bg: #ffffff;
+    --ink: #1a1a1a;           /* black, per guide: approved for text/copy over white */
+    --ink-muted: #5c5c5c;
+    --line: #e1e1e1;          /* Deakin RGB Grey */
+
+    /* Deakin RGB primary palette - block (shape/border use only, never as text) */
+    --block-turquoise: #58bcaf;
+    --block-pink: #c74298;
+    --block-teal: #007d98;
+    --block-orange: #ff9300;
+
+    /* Deakin RGB primary palette - "dark text" variants (approved for text over white/grey) */
+    --text-turquoise: #0b7161;
+    --text-pink: #ac3382;
+    --text-teal: #006d88;
+    --text-orange: #ad4206;
+
+    /* Deakin RGB primary palette - "bright text" variants (approved for text over charcoal only) */
+    --bright-turquoise: #65d8ca;
+    --bright-pink: #ff66b7;
+    --bright-teal: #23b0cf;
+    --bright-orange: #ff9300;
+
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #363635;          /* Deakin RGB Charcoal */
+      --card-bg: #414140;
+      --ink: #ffffff;
+      --ink-muted: #c7c5c3;
+      --line: #55534f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #363635;
+    --card-bg: #414140;
+    --ink: #ffffff;
+    --ink-muted: #c7c5c3;
+    --line: #55534f;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: inherit; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  header {
+    position: relative;
+    padding: 28px 20px 18px;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--block-turquoise);
+    z-index: 0;
+  }
+  header h1, header p { position: relative; z-index: 1; }
+  header h1 {
+    margin: 0 0 4px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    margin: 0;
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    font-weight: 400;
+  }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 14px 20px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 0 0 auto;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+  .tab-btn[aria-selected="true"] {
+    background: var(--block-pink);
+    color: #ffffff;
+    border-color: var(--block-pink);
+  }
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 12px 60px;
+  }
+  .slot {
+    margin: 30px 0 0;
+  }
+  .slot-header {
+    margin: 0 0 4px 4px;
+  }
+  .slot-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .slot-time {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 2px 0 0;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    margin-top: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .room-table {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(220px, 1fr));
+    gap: 10px;
+    min-width: 780px;
+  }
+  .room-col-head {
+    padding: 0 2px 8px;
+    border-bottom: 2px solid var(--room-color, var(--line));
+  }
+  .room-col-head .room-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--room-text, var(--ink));
+  }
+  .room-col-head.inactive .room-name { color: var(--ink-muted); }
+  .cell {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--room-color, var(--block-turquoise));
+    border-radius: 10px;
+    padding: 11px 12px;
+    margin-bottom: 10px;
+  }
+  .cell.empty {
+    background: transparent;
+    border: 1px dashed var(--line);
+  }
+  .cell .cell-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .cell .cell-time {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--room-text, var(--ink));
+  }
+  .cell .type-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--ink-muted);
+    border: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .cell h3 {
+    margin: 0 0 6px;
+    font-size: 0.88rem;
+    line-height: 1.3;
+  }
+  .cell .presenter {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+  }
+  .cell .abstract-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.72rem;
+    color: var(--room-text, var(--ink));
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  footer {
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 0.75rem;
+    padding: 20px;
+  }
+  .room-a {
+    --room-color: var(--block-turquoise);
+    --room-text: var(--text-turquoise);
+  }
+  .room-b {
+    --room-color: var(--block-pink);
+    --room-text: var(--text-pink);
+  }
+  .room-d {
+    --room-color: var(--block-teal);
+    --room-text: var(--text-teal);
+  }
+  .room-c {
+    --room-color: var(--block-orange);
+    --room-text: var(--text-orange);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .room-a { --room-text: var(--bright-turquoise); }
+    :root:not([data-theme="light"]) .room-b { --room-text: var(--bright-pink); }
+    :root:not([data-theme="light"]) .room-d { --room-text: var(--bright-teal); }
+    :root:not([data-theme="light"]) .room-c { --room-text: var(--bright-orange); }
+  }
+  :root[data-theme="dark"] .room-a { --room-text: var(--bright-turquoise); }
+  :root[data-theme="dark"] .room-b { --room-text: var(--bright-pink); }
+  :root[data-theme="dark"] .room-d { --room-text: var(--bright-teal); }
+  :root[data-theme="dark"] .room-c { --room-text: var(--bright-orange); }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 100;
+    padding: env(safe-area-inset-top, 16px) 16px env(safe-area-inset-bottom, 16px);
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--card-bg);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 820px;
+    height: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal-header h4 {
+    margin: 0 0 2px;
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+  .modal-header p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+  }
+  .modal-close {
+    flex: 0 0 auto;
+    border: none;
+    background: var(--bg);
+    color: var(--ink);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-body {
+    flex: 1;
+    background: #55534f;
+  }
+  .modal-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .welcome {
+    max-width: 760px;
+    margin: 18px 20px 0;
+  }
+  .welcome p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .pre-program, .post-program, .break-card-wrap {
+    margin: 8px 8px 20px;
+    padding-top: 8px;
+  }
+  .pre-card {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-left: 5px solid transparent;
+    border-image: linear-gradient(to bottom, var(--block-turquoise), var(--block-pink)) 1 100%;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .pre-card.break-style {
+    border-left: 5px solid var(--block-orange);
+    border-image: none;
+  }
+  .pre-card .cell-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .pre-card .cell-time {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink-muted);
+  }
+  .pre-card .type-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--ink-muted);
+    border: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .pre-card .room-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+  .pre-card h3 {
+    margin: 0 0 8px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .pre-card .panelists {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pre-card .panelists li {
+    font-size: 0.84rem;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .pre-card .panelists li .role {
+    color: var(--ink-muted);
+  }
+  .pre-card .single-presenter {
+    margin: 0;
+    font-size: 0.84rem;
+    color: var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SENS Research Symposium 2026</h1>
+  <p>October 9th 2026</p>
+</header>
+
+<section class="welcome">
+  <p>Welcome to the School of Exercise and Nutrition Sciences 2026 Research Symposium. Our program each year continues to showcase the wide variety and quality of research being conducted by PhD, Honours, Graduate Certificate, Masters and undergraduate students from the school. This years' program includes a variety of mixed theme sessions to give students an opportunity to present to a varied audience, and for attendees to learn about the multi-disciplinary research happening in the school. As in recent years, we have included a 10-minute presenter-audience networking period at the end of sessions to allow for further discussion with presenters about their work.</p>
+</section>
+
+<main id="schedule"></main>
+
+<footer>Click "Tap for Abstract" on any session to view the full abstract PDF.</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h4 id="modalTitle"></h4>
+        <p id="modalPresenter"></p>
+      </div>
+      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <iframe id="modalFrame" title="Abstract PDF"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  "preSessions": [
+    {
+      "time": "9:10 \u2013 9:30",
+      "type": "Welcome Address",
+      "title": "Welcome from Head of School and Symposium Organising Committee",
+      "room": "Wadawurrung 1 & 2 (combined)",
+      "presenters": [{"name": "Prof Brad Aisbett", "role": null}]
+    },
+    {
+      "time": "9:30 \u2013 10:20",
+      "type": "Panel Discussion",
+      "title": "A Discussion on Research Funding: Where to find it and how to get it",
+      "room": "Wadawurrung 1 & 2 (combined)",
+      "presenters": [
+        {"name": "Dr Rebecca Lindberg", "role": "Senior Lecturer, School of Exercise and Nutrition Sciences"},
+        {"name": "Dr Dale Morrison", "role": "Postdoctoral Senior Fellow, The University of Melbourne"}
+      ]
+    },
+    {
+      "time": "10:20 \u2013 10:50",
+      "type": "Break",
+      "title": "Morning Tea Break",
+      "room": null,
+      "isBreak": true,
+      "presenters": []
+    }
+  ],
+  "sessions": [
+    {
+      "slotNum": 1,
+      "sessionName": "Morning Orals",
+      "timeRange": "10:50 \u2013 11:45",
+      "breakAfter": {
+        "time": "11:45 \u2013 11:50",
+        "type": "Break",
+        "title": "Short Break and Changeover",
+        "room": "All Rooms",
+        "isBreak": true,
+        "presenters": []
+      },
+      "rooms": [
+        {"key": "room-a", "label": "Wadawurrung 1", "active": true, "chair": "Dan Dwyer &amp; Laura Marzec"},
+        {"key": "room-b", "label": "Wadawurrung 2", "active": true, "chair": "Dr Snehal Jadhav &amp; Anna Fitriani"},
+        {"key": "room-d", "label": "Gunditjmara 1", "active": true, "chair": "Djin Gie Liem &amp; Lily Donosky"},
+        {"key": "room-c", "label": "Gunditjmara 2", "active": true, "chair": "Aden Kittel &amp; Chitra Tulpule"}
+      ],
+      "rows": [
+        [
+          {"room": "room-a", "time": "10:50", "title": "Thermal and Temporal Effects on UHT Milk During Storage", "presenter": "Kevin Ghavalas", "authors": "K. Ghavalas; S. Kukuljan; Y. Nolvachai; D. Dias; R. Keast", "category": "Food Science & Safety", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Ghavalas_Kevin.pdf"},
+          {"room": "room-b", "time": "10:50", "title": "Title TBA", "presenter": "Joshua Nanayakkara", "authors": "", "category": "Sports Science & Coaching", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Nanayakkara_Joshua.pdf"},
+          {"room": "room-d", "time": "10:50", "title": "The Effect of a Mediterranean Diet on the Cognitive and Physiological Symptoms of Premenstrual Dysphoric Disorder", "presenter": "Milana Cutugno", "authors": "M. Cutugno", "category": "Nutrition & Dietetics", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Cutugno_Milana.pdf"},
+          {"room": "room-c", "time": "10:50", "title": "Interest-holder perspectives on nutrition-related language in Australian schools: implications for children's understanding and relationship with food", "presenter": "Rebecca Sanderson", "authors": "R. Sanderson", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Sanderson_Rebecca.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "11:01", "title": "Krill oil supplementation increases the omega-3 index without altering body composition in young, untrained adults: A randomised controlled trial", "presenter": "Elham Yaghoobi", "authors": "E. Yaghoobi; G. L. Allsopp; R. M. J. Snipe; C. S. Shaw; A. Fox; G. Kaur; A. M. Hunter; L. Hamilton", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Yaghoobi_Elham.pdf"},
+          {"room": "room-b", "time": "11:01", "title": "Validity of critical speed of critical speed determined from multiple time trials in middle- and long-distance runners.", "presenter": "Kieron Lester", "authors": "K. Lester; S. Warmington; R. Siegel; S. Hoffmann", "category": "Exercise Physiology & Muscle", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Lester_Kieron.pdf"},
+          {"room": "room-d", "time": "10:58", "title": "Association Between Microvascular Abnormalities and Post-Exertional Malaise (PEM) Among Adults Diagnosed with Postural Orthostatic Tachycardia Syndrome (POTS)", "presenter": "Zander Bergmeier", "authors": "Z. Bergmeier", "category": "Clinical & Biomedical Science", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Bergmeier_Zander.pdf"},
+          {"room": "room-c", "time": "11:01", "title": "Technical and tactical challenge of training in Australian football", "presenter": "Ethan Jekot", "authors": "E. Jekot; D. Broadbent; L. Bruce; A. Kittel", "category": "Sports Science & Coaching", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Jekot_Ethan.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "11:12", "title": "Facilitators and Barriers to Students Gaining Experience in Community Sporting Clubs", "presenter": "Isabelle Chettibi", "authors": "I. Chettibi", "category": "Sport/Health Management & Policy", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Chettibi_Isabelle.pdf"},
+          {"room": "room-b", "time": "11:12", "title": "Using participatory action to develop and refine an online motor competence assessment resource for teachers", "presenter": "Samantha Snow", "authors": "S. Snow; T. Brown; L. Barnett; J; Salmon; N. Lander", "category": "Education & Pedagogy", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Snow_Samantha.pdf"},
+          {"room": "room-d", "time": "11:06", "title": "Title TBA", "presenter": "Mikayla Winfield-Smith", "authors": "", "category": "Public Health & Health Promotion", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Winfield-Smith_Mikayla.pdf"},
+          {"room": "room-c", "time": "11:12", "title": "Muscling in on Ozempic and Mounjaro: The impact of the new generation of glucagon-like peptide receptor agonists on muscle biology", "presenter": "Lauren Fell", "authors": "L. Fell; G. Wadley; J. Drake; S. Lamon; R. Williams", "category": "Clinical & Biomedical Science", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Fell_Lauren.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "11:23", "title": "Do Running Gait Biomechanics Differ Between Adults and Adolescents with Patellofemoral Pain?", "presenter": "Jessica Loone", "authors": "J. Loone; J. Bonacci; J. Fuller; A. Fox; D. Trowell", "category": "Biomechanics & Motor Control", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Loone_Jessica.pdf"},
+          {"room": "room-b", "time": "11:23", "title": "From Sugar to Shelf Life: Exploring Cultured Dextrose as a Natural Preservative", "presenter": "Shubhkarman Singh Sodhi", "authors": "S. Sodhi; A. Mukurumbira; S. Jadhav; N. Vithange", "category": "Food Science & Safety", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Sodhi_Shubhkarman.pdf"},
+          {"room": "room-d", "time": "11:17", "title": "Cerebrovascular responses to hypercapnia and acute aerobic and resistance exercise in adults living with atrial fibrillation", "presenter": "Tori Roberts", "authors": "T. Roberts; H. Thomas; L. Parker; M. Keske; K. Way", "category": "Exercise Physiology & Muscle", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Roberts_Tori.pdf"},
+          {"room": "room-c", "time": "11:23", "title": "Supporting Australian general practice nurses to screen and advise on healthy movement behaviours: a co-design project", "presenter": "Aaron Beecroft", "authors": "A. Beecroft; S. Sahlqvist; A. Chapman; R. Fiolet; D. Dunstan", "category": "Public Health & Health Promotion", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Beecroft_Aaron.pdf"}
+        ]
+      ]
+    },
+    {
+      "slotNum": 2,
+      "sessionName": "Late Morning Orals",
+      "timeRange": "11:50 \u2013 12:45",
+      "breakAfter": {
+        "time": "12:45 \u2013 13:45",
+        "type": "Break",
+        "title": "Lunch Break",
+        "room": null,
+        "isBreak": true,
+        "presenters": []
+      },
+      "rooms": [
+        {"key": "room-a", "label": "Wadawurrung 1", "active": true, "chair": "Jackson Fyfe &amp; Luana Mascarenhas"},
+        {"key": "room-b", "label": "Wadawurrung 2", "active": true, "chair": "Severine Lamon &amp; Melissa Langfield"},
+        {"key": "room-d", "label": "Gunditjmara 1", "active": true, "chair": "David Broadbent &amp; Saeed Ghobadi"},
+        {"key": "room-c", "label": "Gunditjmara 2", "active": true, "chair": "Monica Kelly &amp; Nada Khater"}
+      ],
+      "rows": [
+        [
+          {"room": "room-a", "time": "11:50", "title": "Comparison of patellofemoral joint loading estimates across modelling methods", "presenter": "Zhenghe Qiu", "authors": "Z. Qiu; J. Bonacci; A. Fox", "category": "Biomechanics & Motor Control", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Qiu_Zhenghe.pdf"},
+          {"room": "room-b", "time": "11:50", "title": "Framing food insecurity in Australia: Actors\u2019 perspectives and implications for policy and practice", "presenter": "Monica Venosa", "authors": "M. Venosa; K. Wingrove; F. McKay; C. Rusell; P. Machado; R. Lindberg", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Lopez_Monica.pdf"},
+          {"room": "room-d", "time": "11:50", "title": "Is evaluating Movement Quality via Moving the Next Generation (MNG) effective for identifying ACL Injury risk during dynamic cutting tasks?", "presenter": "Malishi Patabendige", "authors": "M. Patabendige", "category": "Biomechanics & Motor Control", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Patabendige_Malishi.pdf"},
+          {"room": "room-c", "time": "11:50", "title": "Plant-based diet quality and prevalence of type-2 diabetes among Australian adults: A nationwide cross-sectional study", "presenter": "Natalia Tolstova", "authors": "N. Tolstova; P. Machado; M. Keske; C. Milte; K. Livingstone", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Tolstova_Natalia.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "12:01", "title": "Content analysis of publicly visible assessment policy discourses in universities", "presenter": "Ryan Surace", "authors": "R. Surace; J. Tai; C. Palermo; J. Porter", "category": "Education & Pedagogy", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Surace_Ryan.pdf"},
+          {"room": "room-b", "time": "12:01", "title": "Sex Differences in Human Skeletal Muscle Across the Adult Lifespan: From Phenotype to Transcriptome", "presenter": "Karel Van Belleghem", "authors": "K. Van Belleghem; R. Williams; A. Critchlow; V. Engman; M. Soria; E. Reismand; N. Eynone; A. Garnham; J. Ryan; D. Hiam; S. Lamon", "category": "Exercise Physiology & Muscle", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Belleghem_Karel.pdf"},
+          {"room": "room-d", "time": "11:58", "title": "Talent Development Environment or Personality? Predicting Continued Sport Participation Following Athlete Deselection", "presenter": "Apoorva Naik", "authors": "A. Naik", "category": "Sports Science & Coaching", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Naik_Apoorva.pdf"},
+          {"room": "room-c", "time": "12:01", "title": "Validity of Garmin wrist-worn smartwatch biomechanical variables during overground walking and running with and without a pram", "presenter": "Natasha Panucci", "authors": "N. Panucci; D. Trowell; N. Saunders; M. Kelly; C. Kenneally-Dabrowski", "category": "Biomechanics & Motor Control", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Panucci_Natasha.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "12:12", "title": "Acute effects of almond protein powder or whey protein on plasma amino acid profiles in postmenopausal women: A randomised crossover study", "presenter": "Vy Tran", "authors": "V. Tran; Z. Huschtscha; M. Tieland; S. Tan; J. Fyfe; S. A. Feros; R. Snipe; G. Allsopp; C. R. Bruce; G. M. Kowalski; S. Mason; A. J. Carr; G. Abbott; L. Mascarenhas; G. Dao; D. Francis; K. McEwen; D. L. Hamilton; C. S. Urwin", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Tran_Vy.pdf"},
+          {"room": "room-b", "time": "12:12", "title": "Familiarisation and reliability of an objective lower-limb testing battery for ankle rehabilitation and return-to-play management", "presenter": "Jakob De Coninck", "authors": "J. De Coninck; L. Bradshaw; E. Drinkwater", "category": "Biomechanics & Motor Control", "type": "10-min Honours Proposal", "pdf": "abstracts/Symposium2026_DeConinck_Jakob.pdf"},
+          {"room": "room-d", "time": "12:06", "title": "Sitting, stepping, and accumulation patterns across work-from-home and workplace contexts in adults with type 2 diabetes", "presenter": "Lisa Becker", "authors": "L. Becker; G. N. Healy; E. A. H. Winkler; P. A. Gardiner; R. Grigg; P. C. Dempsey; M. J. Wheeler; D. W. Dunstan", "category": "Public Health & Health Promotion", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Becker_Lisa.pdf"},
+          {"room": "room-c", "time": "12:12", "title": "Authentication of premium bioactive-rich sugarcane products", "presenter": "Wakkumburage Yasara Hithaishi Wickramasinghe", "authors": "Y. W. H. Wickramasinghe; M. Flavel; S. R. Jadhav; R. Keast; D. A. Dias", "category": "Food Science & Safety", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Wickramasinghe_Yasara.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "12:23", "title": "Barriers and drivers for protein transition among older Australians: A cross-sectional study", "presenter": "Tracey Van Grunsven", "authors": "T. Van Grunsven; J. Nanayakkara; M. Tieland; G. Liem", "category": "Public Health & Health Promotion", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_VanGrunsven_Tracey.pdf"},
+          null,
+          {"room": "room-d", "time": "12:17", "title": "Smartphone-based life-space mobility tracking in older adults undergoing joint replacement: A feasibility study", "presenter": "Mosi Ahmadi", "authors": "M. Ahmadi; C. Glavas; J. Mesinovic; J. D. A. L. L. A. Via; P. Jansons; A. Khosravi; R. Daly; S. Gill; D. Scott", "category": "Digital Health & Technology", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Ahmadi_Mosi.pdf"},
+          {"room": "room-c", "time": "12:23", "title": "A Proof-of-Concept Study: Enhancing Microbial Volatile Profiles for Rapid Screening of Pseudomonas in Milk", "presenter": "Sherlyn Ardison", "authors": "S. Ardison; Y. Nolvachai; D. A. Dias; S. R. Jadhav", "category": "Food Science & Safety", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Ardison_Sherlyn.pdf"}
+        ]
+      ]
+    },
+    {
+      "slotNum": 3,
+      "sessionName": "Afternoon Orals",
+      "timeRange": "13:50 \u2013 14:45",
+      "breakAfter": {
+        "time": "14:45 \u2013 15:20",
+        "type": "Break",
+        "title": "Afternoon Tea Break",
+        "room": null,
+        "isBreak": true,
+        "presenters": []
+      },
+      "rooms": [
+        {"key": "room-a", "label": "Wadawurrung 1", "active": true, "chair": "Georgie Russell &amp; Ayesha Liaqat"},
+        {"key": "room-b", "label": "Wadawurrung 2", "active": true, "chair": "Brenton Baguley"},
+        {"key": "room-d", "label": "Gunditjmara 1", "active": true, "chair": "Lilia Convit"},
+        {"key": "room-c", "label": "Gunditjmara 2", "active": true, "chair": "Jeremy Drake"}
+      ],
+      "rows": [
+        [
+          {"room": "room-a", "time": "13:50", "title": "Differences in exercise capacity and metabolic health between adults with and without type 2 diabetes", "presenter": "Yunda Huang", "authors": "Y. Huang; M. Keske; S. Mason; J. Benjamin; L. Parker", "category": "Exercise Physiology & Muscle", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Huang_Yunda.pdf"},
+          {"room": "room-b", "time": "13:50", "title": "Joint temporal patterns of eating and 24-hour movement behaviours: Associations with adiposity and blood pressure in Australian adults", "presenter": "Beshada Rago Jima", "authors": "B. Jima; S. McNaughton; D. Dunstan; A. Kouzani; R. Leech", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Jima_Beshada.pdf"},
+          {"room": "room-d", "time": "13:50", "title": "Exploring the associations between play types and fundamental motor skills in kindergarten children: a mixed methods study", "presenter": "Ethan Nguyen", "authors": "E. Nguyen", "category": "Education & Pedagogy", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Nguyen_Ethan.pdf"},
+          {"room": "room-c", "time": "13:50", "title": "Coach development in national sportng organisations: Organisation and implementation", "presenter": "Liam Mulcahy", "authors": "L. Mulcahy; H. Brown; Z. Avner; D. Broadbent; W. Vickery", "category": "Sports Science & Coaching", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Mulcahy_Liam.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "14:01", "title": "Co-designing and optimising an online nutrition education program for people with multiple sclerosis", "presenter": "Eduard Martinez Solsona", "authors": "E. Martinez-Solsona; L. Black; L. Grech; S. Chul-O; C. Prasertsung; L. Barisic; B. Brayner; P. Machado; E. Dunlop; A. Begley; R. Russell", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Solsona_Eduard.pdf"},
+          {"room": "room-b", "time": "14:01", "title": "Are we committed to building better streets that boost cycling transport? A policy content analysis of Victoria\u2019s policies", "presenter": "Alex Delbridge", "authors": "A. Delbridge; A. Timperio; A. Walsh; M. Lowe; B. Deforche; D. Van Dyck; S. Shalqvist", "category": "Sport/Health Management & Policy", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Delbridge_Alex.pdf"},
+          {"room": "room-d", "time": "13:58", "title": "The effect of manual-handling fatigue and carried load on trip recovery", "presenter": "Manas Karkal", "authors": "M. Karkal", "category": "Biomechanics & Motor Control", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Karkal_Manas.pdf"},
+          {"room": "room-c", "time": "14:01", "title": "Mitochondria Present in Media of Cultured Human Skeletal Muscle Cells", "presenter": "Will Lewena", "authors": "W. Lewena; J. Drake; G. Wadley", "category": "Exercise Physiology & Muscle", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Lewena_Will.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "14:12", "title": "Planning for pregnancy, stressed about food: Food insecurity among women in the preconception period", "presenter": "Amanda Dickson", "authors": "A. Dickson; F. H. McKay; P. Love; N. Heslehurst; G. Abbott; R. Laws; P. van der Pligt", "category": "Public Health & Health Promotion", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Dickson_Amanda.pdf"},
+          {"room": "room-b", "time": "14:12", "title": "Associations Between Sleep and Muscle Health Across the Lifespan: Influence of Sex and Age", "presenter": "Sarah Jamnagarwala", "authors": "S. Jamnagarwala; S. Roberts; D. Hiam; S. Lamon", "category": "Exercise Physiology & Muscle", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Jamnagarwala_Sarah.pdf"},
+          {"room": "room-d", "time": "14:06", "title": "Carbohydrate Intake and Risk of Relative Energy Deficiency in Sport (RED-S) in Endurance Trained Athletes with Coeliac Disease", "presenter": "Elise Popowski", "authors": "E. Popowski", "category": "Nutrition & Dietetics", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Popowski_Elise.pdf"},
+          {"room": "room-c", "time": "14:12", "title": "Zinc absorption and adherence to the EAT-Lancet planetary health diet", "presenter": "Jayden Ordner", "authors": "J. Ordner; L. Atkins; C. Margerison; E. Szymlek-Gay", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Ordner_Jayden.pdf"}
+        ],
+        [
+          {"room": "room-a", "time": "14:23", "title": "Understanding the barriers to plant-based dietary change: The mediating role of meat-centric meal perception among adults in Australia and Denmark", "presenter": "Ramya Rao", "authors": "R. Rao; D. G. Liem; Q. J. Wang", "category": "Sport/Health Management & Policy", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Rao_Ramya.pdf"},
+          {"room": "room-b", "time": "14:23", "title": "Near-real-time screening of microbial contamination in foods", "presenter": "Amanda Liyanage", "authors": "A. Liyanage; M. Flavel; V. Gupta; A. Mukurumbira; D. A. Dias; S. R. Jadhav", "category": "Food Science & Safety", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Liyanage_Amanda.pdf"},
+          {"room": "room-d", "time": "14:14", "title": "Mussels as a snack option to increase the omega-3 index and markers of recovery in female athletes [the mussels project]", "presenter": "Tiana Prodanov", "authors": "T. Prodanov; R. Snipe; L. Convit; L. Hamilton", "category": "Sports Science & Coaching", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Prodanov_Tiana.pdf"},
+          {"room": "room-c", "time": "14:23", "title": "Modification of individual challenge in team-based training in elite Australian rules football: A case study", "presenter": "Sarah Green", "authors": "S. Green; D. Broadbent; A. Kittel; W. McCalman; L. Bruce", "category": "Biomechanics & Motor Control", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Green_Sarah.pdf"}
+        ]
+      ]
+    },
+    {
+      "slotNum": 4,
+      "sessionName": "Late Afternoon Orals",
+      "timeRange": "15:20 \u2013 16:15",
+      "rooms": [
+        {"key": "room-a", "label": "Wadawurrung 1", "active": true, "chair": "Natalie Saunders"},
+        {"key": "room-b", "label": "Wadawurrung 2", "active": true, "chair": "Jonas Benjamim"},
+        {"key": "room-d", "label": "Gunditjmara 1", "active": true, "chair": "Penny Love"},
+        {"key": "room-c", "label": "Gunditjmara 2", "active": false, "chair": null}
+      ],
+      "rows": [
+        [
+          {"room": "room-a", "time": "15:20", "title": "What Biopsychosocial Factors Impact Running During the First Year Postpartum.", "presenter": "Emily Fitzwilliam", "authors": "E. Fitzwilliam; D. Trowell; J. Bonacci; S. Hoffmann; A. Fox; N. Saunders", "category": "Sports Science & Coaching", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Fitzwilliam_Emily.pdf"},
+          {"room": "room-b", "time": "15:20", "title": "Plasma Metabolomic Profiling to Identify Metabolites Associated with Hyperinsulinaemia", "presenter": "Josephine Vovos", "authors": "J. Vovos; S. Mason; C. Shaw; C. Bruce", "category": "Clinical & Biomedical Science", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Vovos_Josephine.pdf"},
+          {"room": "room-d", "time": "15:20", "title": "Using an implementation framework to evaluate and enhance the integration of Nutrition Assistants in cancer care", "presenter": "Morgan Colwell", "authors": "M. Colwell", "category": "Nutrition & Dietetics", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Colwell_Morgan.pdf"},
+          null
+        ],
+        [
+          {"room": "room-a", "time": "15:31", "title": "Impact of nutrition on acute physiological responses to resistance training in hypoxia", "presenter": "Jyotiraditya Bode", "authors": "J. Bode; L. Wells; A. Orr; L. Hamilton; C. Wright; G. Allsopp", "category": "Exercise Physiology & Muscle", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Bode_Jyotiraditya.pdf"},
+          {"room": "room-b", "time": "15:31", "title": "Using AI to analyse the prevalence of nutrition, health and marketing claims on child-targeted ultra-processed foods", "presenter": "Teagan Hickey", "authors": "T. Hickey; P. Machado; J. Woods; G. Russell", "category": "Nutrition & Dietetics", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Hickey_Teagan.pdf"},
+          {"room": "room-d", "time": "15:28", "title": "Title TBA", "presenter": "Pavan Vutukuri", "authors": "P. Vutukuri", "category": "Sports Science & Coaching", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Vutukuri_Pavan.pdf"},
+          null
+        ],
+        [
+          {"room": "room-a", "time": "15:42", "title": "Marine red algae: A natural defence to alleviate food spoilage", "presenter": "Hemavaruni Nisansala Fernando", "authors": "H. N. Fernando; M. D. S. Hossain; J. M. Drake; M. Flavel; D. L. Callahan; R. Keast; S. R. Jadhav; D. A. Dias", "category": "Food Science & Safety", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Fernando_Hemavaruni.pdf"},
+          {"room": "room-b", "time": "15:42", "title": "Assessing the Reliability of AI-Driven Motor Competence Systems and Investigating Accuracy Through Expert Informed Refinement", "presenter": "Mason Potter", "authors": "M. Potter; N. Lander; A. Timperio", "category": "Public Health & Health Promotion", "type": "10-min Honours Proposal", "pdf": "abstracts/Symposium2026_Potter_Mason.pdf"},
+          {"room": "room-d", "time": "15:36", "title": "The effect of exercise on inflammatory markers in women with endometriosis", "presenter": "Sophie Langford", "authors": "S. Langford", "category": "Clinical & Biomedical Science", "type": "5-min IREP Proposal", "pdf": "abstracts/Symposium2026_Langford_Sophie.pdf"},
+          null
+        ],
+        [
+          {"room": "room-a", "time": "15:53", "title": "End user Consensus on Effective and Feasible Heat Stress Mitigation Strategies: A Delphi Study", "presenter": "Riley Bryce", "authors": "R. Bryce", "category": "Public Health & Health Promotion", "type": "10-min Honours Proposal", "pdf": "abstracts/Symposium2026_Bryce_Riley.pdf"},
+          null,
+          {"room": "room-d", "time": "15:44", "title": "Consensus on recommended functions of a smart home system to support people living with dementia: A modified Delphi study", "presenter": "Tracy Yiannis", "authors": "T. Yiannis; M. Song; H. Macpherson; D. Scott; P. Jansons", "category": "Digital Health & Technology", "type": "8-min Oral Presentation", "pdf": "abstracts/Symposium2026_Yiannis_Tracy.pdf"},
+          null
+        ]
+      ]
+    }
+  ],
+  "postSessions": [
+    {
+      "time": "16:15 \u2013 18:00",
+      "type": "Closing",
+      "title": "End of Day Wrap-Up & Social Drinks",
+      "room": "The Round",
+      "isBreak": true,
+      "note": "Includes student award announcements",
+      "presenters": []
+    }
+  ]
+};
+
+const scheduleEl = document.getElementById('schedule');
+
+function renderCard(session, isBreak = false) {
+  const card = document.createElement('div');
+  card.className = 'pre-card' + (isBreak ? ' break-style' : '');
+  
+  let peopleHtml = '';
+  if (session.presenters && session.presenters.length === 1) {
+    const p = session.presenters[0];
+    peopleHtml = `<p class="single-presenter">${p.name}${p.role ? ' &ndash; ' + p.role : ''}</p>`;
+  } else if (session.presenters && session.presenters.length > 1) {
+    peopleHtml = '<ul class="panelists">' + session.presenters.map(p =>
+      `<li>${p.name}<br><span class="role">${p.role}</span></li>`
+    ).join('') + '</ul>';
+  }
+
+  const roomHtml = session.room ? `<div class="room-tag">${session.room}</div>` : '';
+  const noteHtml = session.note ? `<p class="single-presenter">${session.note}</p>` : '';
+
+  card.innerHTML = `
+    <div class="cell-top">
+      <span class="cell-time">${session.time}</span>
+      <span class="type-badge">${session.type}</span>
+    </div>
+    ${roomHtml}
+    <h3>${session.title}</h3>
+    ${peopleHtml}
+    ${noteHtml}
+  `;
+  return card;
+}
+
+function renderPreProgram() {
+  if (!DATA.preSessions || !DATA.preSessions.length) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'pre-program';
+  DATA.preSessions.forEach((session) => {
+    wrap.appendChild(renderCard(session, session.isBreak));
+  });
+  scheduleEl.appendChild(wrap);
+}
+
+function renderPostProgram() {
+  if (!DATA.postSessions || !DATA.postSessions.length) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'post-program';
+  DATA.postSessions.forEach((session) => {
+    wrap.appendChild(renderCard(session, session.isBreak));
+  });
+  scheduleEl.appendChild(wrap);
+}
+
+function renderTabs() {
+  const tabs = document.createElement('div');
+  tabs.className = 'tabs';
+  tabs.id = 'roomFilter';
+  const roomButtons = [
+    { room: 'all', label: 'All Rooms' },
+    { room: 'room-a', label: 'Wadawurrung 1' },
+    { room: 'room-b', label: 'Wadawurrung 2' },
+    { room: 'room-d', label: 'Gunditjmara 1' },
+    { room: 'room-c', label: 'Gunditjmara 2' },
+  ];
+  roomButtons.forEach(({ room, label }) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn';
+    btn.setAttribute('aria-selected', room === 'all' ? 'true' : 'false');
+    btn.dataset.room = room;
+    btn.textContent = label;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.setAttribute('aria-selected', 'false'));
+      btn.setAttribute('aria-selected', 'true');
+      applyFilter(room);
+    });
+    tabs.appendChild(btn);
+  });
+  scheduleEl.appendChild(tabs);
+}
+
+function render() {
+  scheduleEl.innerHTML = '';
+  renderPreProgram();
+  renderTabs();
+  
+  DATA.sessions.forEach((slot) => {
+    const slotDiv = document.createElement('div');
+    slotDiv.className = 'slot';
+
+    const header = document.createElement('div');
+    header.className = 'slot-header';
+    header.innerHTML = `<div class="slot-name">${slot.sessionName}</div><div class="slot-time">${slot.timeRange}</div>`;
+    slotDiv.appendChild(header);
+
+    const scrollWrap = document.createElement('div');
+    scrollWrap.className = 'table-scroll';
+    const table = document.createElement('div');
+    table.className = 'room-table';
+
+    slot.rooms.forEach((r, colIdx) => {
+      const head = document.createElement('div');
+      head.className = `room-col-head ${r.key}` + (r.active ? '' : ' inactive');
+      head.innerHTML = `<div class="room-name">${r.label}</div>`;
+      head.style.gridColumn = String(colIdx + 1);
+      table.appendChild(head);
+    });
+
+    slot.rows.forEach(row => {
+      row.forEach((cell, colIdx) => {
+        const roomKey = slot.rooms[colIdx].key;
+        if (!cell) {
+          const empty = document.createElement('div');
+          empty.className = `cell empty ${roomKey}`;
+          empty.style.gridColumn = String(colIdx + 1);
+          table.appendChild(empty);
+          return;
+        }
+        const div = document.createElement('div');
+        div.className = `cell ${cell.room}`;
+        div.style.gridColumn = String(colIdx + 1);
+        div.innerHTML = `
+          <div class="cell-top">
+            <span class="cell-time">${cell.time}</span>
+            <span class="type-badge">${cell.type}</span>
+          </div>
+          <h3>${cell.title}</h3>
+          <p class="presenter">${cell.presenter}</p>
+          <a class="abstract-link">Tap for abstract</a>
+        `;
+        div.querySelector('.abstract-link').addEventListener('click', () => openModal(cell));
+        table.appendChild(div);
+      });
+    });
+
+    scrollWrap.appendChild(table);
+    slotDiv.appendChild(scrollWrap);
+    
+    if (slot.breakAfter) {
+      const breakWrap = document.createElement('div');
+      breakWrap.className = 'break-card-wrap';
+      breakWrap.appendChild(renderCard(slot.breakAfter, true));
+      slotDiv.appendChild(breakWrap);
+    }
+
+    scheduleEl.appendChild(slotDiv);
+  });
+
+  renderPostProgram();
+  applyFilter(currentFilter);
+}
+
+const modalOverlay = document.getElementById('modalOverlay');
+const modalFrame = document.getElementById('modalFrame');
+const modalTitle = document.getElementById('modalTitle');
+const modalPresenter = document.getElementById('modalPresenter');
+
+function openModal(cell) {
+  modalTitle.textContent = cell.title;
+  modalPresenter.textContent = cell.presenter;
+  modalFrame.src = cell.pdf;
+  modalOverlay.classList.add('open');
+}
+function closeModal() {
+  modalOverlay.classList.remove('open');
+  modalFrame.src = '';
+}
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', (e) => {
+  if (e.target === modalOverlay) closeModal();
+});
+
+let currentFilter = 'all';
+function applyFilter(room) {
+  currentFilter = room;
+  document.querySelectorAll('.room-col-head, .cell').forEach(el => {
+    if (room === 'all' || el.classList.contains(room)) {
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
